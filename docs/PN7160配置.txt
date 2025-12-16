@@ -1,0 +1,5 @@
+libnfc-nxp.conf
+里面的
+NXP_SYS_CLK_SRC_SEL=0x02 要改为0x01
+NXP_EXT_TVDD_CFG=0x02 如果VBAT采用3.3V供电改为0x01,5V保持02
+NXP_T4T_NFCEE_ENABLE = 0 这个改为0

@@ -184,18 +184,58 @@ ls $(OPENWRT_DIR)/bin/packages/*/packages/libnfc-nci*.ipk
 
 ## 🔌 Hardware Setup
 
-### PN7160 to OpenWrt Device Connection
+### BPI-R3 26-Pin GPIO Header Pinout
 
-| Device Pin | PN7160 Pin | Function |
-|------------|------------|----------|
-| 3.3V       | VDD        | Power    |
-| 5V         | VBAT       | Power    |
-| GND        | GND        | Ground   |
-| I2C SDA    | SDA        | I2C Data |
-| I2C SCL    | SCL        | I2C Clock|
-| GPIO       | IRQ        | Interrupt|
-| GPIO       | VEN        | Enable   |
-| GPIO       | DWL_REQ    | Download |
+| Sparefunction | Mainfunction | pin# |     | pin# | Mainfunction | Sparefunction |
+|---------------|--------------|------|-----|------|--------------|---------------|
+| -             | 3V3          | 1    | ● ● | 2    | 5V           | -             |
+| I2C_SDA       | GPIO 4       | 3    | ● ● | 4    | 5V           | -             |
+| I2C SCL       | GPIO 3       | 5    | ● ● | 6    | GND          | -             |
+| PWM1          | GPIO 22      | 7    | ● ● | 8    | GPIO 43      | UART1 TX      |
+| -             | GND          | 9    | ● ● | 10   | GPIO 42      | UART1 RX      |
+| UART2 TX      | GPIO 30      | 11   | ● ● | 12   | GPIO 64      | PCM_CLK       |
+| UART2 RX      | GPIO 29      | 13   | ● ● | 14   | GND          | -             |
+| PCM_FS        | GPIO 65      | 15   | ● ● | 16   | GPIO 45      | UART1_RTS     |
+| -             | 3V3          | 17   | ● ● | 18   | GPIO 44      | UART1_CTS     |
+| SPIC_MO       | GPIO 7       | 19   | ● ● | 20   | GND          | -             |
+| SPIC_MI       | GPIO 8       | 21   | ● ● | 22   | GPIO 62      | PCM_DTX       |
+| SPIC_CK       | GPIO 6       | 23   | ● ● | 24   | GPIO 14      | SPIC_CS       |
+| -             | GND          | 25   | ● ● | 26   | GPIO 63      | PCM_DRX       |
+
+### PN7160 Module Pinout (B26-I-6818)
+
+| PIN  | Signal | I/O Type | Description |
+|------|--------|----------|-------------|
+| PIN1 | SCL    | OD       | I2C SCL (internal 4.7K pull-up) |
+| PIN2 | SDA    | OD       | I2C SDA (internal 4.7K pull-up) |
+| PIN3 | IRQ    | I/O      | Tell the host this module have I2C data to send. High enable, normal Low |
+| PIN4 | VEN    | I/O      | Reset the module, set Low to reset |
+| PIN5 | D-/DWL | I/O      | USB D- (USB mode); DWL (I2C mode - firmware download) |
+| PIN6 | D+/NC  | I/O      | USB D+ (USB mode); NC (I2C mode - not connected) |
+| PIN7 | GND    | PWR      | Power GND |
+| PIN8 | VDD    | PWR      | Power supply, default 5V (3.3V selectable) |
+
+**Notes:**
+- ① Module has internal 4.7KΩ pull-up resistors on I2C lines
+- ② USB D+/D- pins for USB communication mode
+- ③ In I2C mode: PIN5 = DWL (firmware download), PIN6 = NC (not connected)
+
+### PN7160 to BPI-R3 Connection
+
+| BPI-R3 Pin           | PN7160 Pin | Function   |
+|----------------------|------------|------------|
+| Pin 2 (5V)           | VDD (PIN8) | Power      |
+| Pin 6 (GND)          | GND (PIN7) | Ground     |
+| Pin 3 (GPIO 4/SDA)   | SDA (PIN2) | I2C Data   |
+| Pin 5 (GPIO 3/SCL)   | SCL (PIN1) | I2C Clock  |
+| Pin 23 (GPIO 6)      | IRQ (PIN3) | Interrupt  |
+| Pin 21 (GPIO 8)      | VEN (PIN4) | Enable     |
+| Pin 15 (GPIO 65)     | DWL (PIN5) | Download   |
+
+**Connection Summary:**
+- **Power & Ground**: Pin 2 (5V) and Pin 6 (GND - near 5V)
+- **I2C Bus**: Pin 3 (SDA) and Pin 5 (SCL) → Hardware I2C (i2c-0)
+- **Control Signals**: Pin 23 (IRQ), Pin 21 (VEN), Pin 15 (DWL)
 
 ### Enable I2C Interface
 
@@ -208,16 +248,34 @@ insmod i2c-dev
 
 ## 💻 Usage
 
+### Hardware Connection Example
+
+![Hardware Connection](docs/test-module.jpg)
+*PN7160 module connected to BPI-R3 via 26-pin header*
+
 ### Basic NFC Operations
 
 ```bash
 # Run demo application
 nfcDemoApp poll
 
-# Check configuration
+# Check configuration files
 cat /etc/nfc/libnfc-nci.conf
 cat /etc/nfc/libnfc-nxp.conf
 ```
+
+### Configuration Files
+
+The package includes multiple configuration files:
+
+- **[libnfc-nxp.conf](files/libnfc-nxp.conf)** - Main NXP vendor configuration
+- **[libnfc-nxp-debug.conf](files/libnfc-nxp-debug.conf)** - Debug configuration with verbose logging
+- **[libnfc-nci.conf](files/libnfc-nci.conf)** - System configuration
+
+### Test Results
+
+![Test Results](docs/test-result.png)
+*Successful NFC tag detection and reading*
 
 ### Configuration Override
 
@@ -303,7 +361,7 @@ ssh root@device "opkg install /tmp/libnfc-nci*.ipk"
 
 ## 📄 License
 
-Apache License 2.0 (see LICENSE.txt in source)
+BSD-3-Clause
 
 ---
 
@@ -322,6 +380,9 @@ Apache License 2.0 (see LICENSE.txt in source)
 
 ### OpenWrt Related
 - 🔗 [OpenWrt Package Guidelines](https://openwrt.org/docs/guide-developer/packages)
+
+### PN7160 Module Purchase
+- 🔗 [B26-I-6818 Module (1688.com)](https://detail.1688.com/offer/849189785380.html?spm=a261y.25179003.relatedOffer.5.69cf47983rNrHB)
 
 ---
 

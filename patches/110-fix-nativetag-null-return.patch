@@ -1,0 +1,13 @@
+Index: libnfc-nci-2.0/src/nxp_nci_hal_nfc/nci/jni/NativeNfcTag.cpp
+===================================================================
+--- libnfc-nci-2.0.orig/src/nxp_nci_hal_nfc/nci/jni/NativeNfcTag.cpp
++++ libnfc-nci-2.0/src/nxp_nci_hal_nfc/nci/jni/NativeNfcTag.cpp
+@@ -1233,7 +1233,7 @@ static jbyteArray nativeNfcTag_doTransce
+     DLOG_IF(INFO, nfc_debug_enabled)
+         << StringPrintf("%s: tag not active", __func__);
+     gSyncMutex.unlock();
+-    return NULL;
++    return -1;
+   }
+ 
+   NfcTag& natTag = NfcTag::getInstance();

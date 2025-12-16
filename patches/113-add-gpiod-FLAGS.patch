@@ -1,0 +1,47 @@
+Index: libnfc-nci-2.0/configure.ac
+===================================================================
+--- libnfc-nci-2.0.orig/configure.ac
++++ libnfc-nci-2.0/configure.ac
+@@ -110,4 +110,25 @@ fi])
+ 
+ AM_CONDITIONAL([LLCP1_3],   [test x$llcp1_3  = xtrue])
+ 
++# Check for libgpiod support
++AC_ARG_ENABLE([libgpiod],
++  [AS_HELP_STRING([--enable-libgpiod],
++                  [use libgpiod for GPIO control instead of sysfs (default is no)])],
++  [enable_libgpiod=$enableval],
++  [enable_libgpiod=no]
++)
++
++if test "x$enable_libgpiod" = xyes; then
++  PKG_CHECK_MODULES([GPIOD], [libgpiod >= 1.0], [
++    AC_DEFINE([USE_LIBGPIOD], [1], [Use libgpiod library for GPIO control])
++    AC_MSG_NOTICE([libgpiod support is enabled])
++  ], [
++    AC_MSG_ERROR([libgpiod >= 1.0 is required when --enable-libgpiod is specified])
++  ])
++else
++  AC_MSG_NOTICE([libgpiod support is disabled, using sysfs GPIO interface])
++fi
++
++AM_CONDITIONAL([USE_LIBGPIOD], [test x$enable_libgpiod = xyes])
++
+ AC_OUTPUT
+Index: libnfc-nci-2.0/Makefile.am
+===================================================================
+--- libnfc-nci-2.0.orig/Makefile.am
++++ libnfc-nci-2.0/Makefile.am
+@@ -30,6 +30,12 @@ AM_CPPFLAGS += \
+ AM_LDFLAGS += -L$(openssldir)/lib -lcrypto -lssl
+ endif
+ 
++if USE_LIBGPIOD
++AM_CPPFLAGS += -DUSE_LIBGPIOD $(GPIOD_CFLAGS)
++AM_LDFLAGS += $(GPIOD_LIBS)
++libnfc_nci_linux_la_LIBADD = $(GPIOD_LIBS)
++endif
++
+ lib_LTLIBRARIES += libpn7160_fw.la
+ 
+ libpn7160_fw_la_SOURCES = \

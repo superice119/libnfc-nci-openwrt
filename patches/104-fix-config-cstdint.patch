@@ -1,0 +1,12 @@
+Index: libnfc-nci-2.0/src/nxp_nci_hal_libnfc-nci/utils/include/config.h
+===================================================================
+--- libnfc-nci-2.0.orig/src/nxp_nci_hal_libnfc-nci/utils/include/config.h
++++ libnfc-nci-2.0/src/nxp_nci_hal_libnfc-nci/utils/include/config.h
+@@ -14,6 +14,7 @@
+  * limitations under the License.
+  */
+ #pragma once
++#include <cstdint>
+ 
+ #include <map>
+ #include <string>

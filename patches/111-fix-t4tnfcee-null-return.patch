@@ -1,0 +1,16 @@
+Index: libnfc-nci-2.0/src/nxp_nci_hal_nfc/nci/jni/NativeT4tNfcee.cpp
+===================================================================
+--- libnfc-nci-2.0.orig/src/nxp_nci_hal_nfc/nci/jni/NativeT4tNfcee.cpp
++++ libnfc-nci-2.0/src/nxp_nci_hal_nfc/nci/jni/NativeT4tNfcee.cpp
+@@ -337,7 +337,11 @@ jbyteArray NativeT4tNfcee::t4tReadData(J
+     return NULL;
+   }
+   #endif
++  #ifdef LINUX
++  if (setup() != NFA_STATUS_OK) return NFA_STATUS_FAILED;
++  #else
+   if (setup() != NFA_STATUS_OK) return NULL;
++  #endif
+ 
+   #ifdef LINUX
+   uint8_t* pFileId = buf;

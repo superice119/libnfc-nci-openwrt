@@ -1,0 +1,128 @@
+#!/bin/sh
+# NFC helper script for OpenWrt
+# Usage: nfc-helper <command>
+
+CONF_DIR=/etc/nfc
+NFC_APP=/usr/sbin/nfcDemoApp
+
+print_usage() {
+	cat <<EOF
+Usage: nfc-helper <command>
+
+Commands:
+  start         Start NFC demo app in poll mode
+  stop          Stop NFC demo app
+  status        Check NFC service status
+  test          Run basic NFC test
+  check         Check NFC hardware and configuration
+  config        Show configuration files
+  help          Show this help message
+
+Examples:
+  nfc-helper start
+  nfc-helper check
+  nfc-helper test
+EOF
+}
+
+check_hardware() {
+	echo "=== NFC Hardware Check ==="
+	
+	# Check I2C
+	if [ -e /dev/i2c-0 ] || [ -e /dev/i2c-1 ]; then
+		echo "✓ I2C device found"
+		ls -l /dev/i2c-*
+	else
+		echo "✗ I2C device not found"
+		echo "  Try: insmod i2c-dev"
+	fi
+	
+	# Check GPIO
+	if command -v gpioinfo >/dev/null 2>&1; then
+		echo "✓ GPIO tools available"
+	else
+		echo "✗ GPIO tools not found (libgpiod)"
+		echo "  Install: opkg install libgpiod"
+	fi
+	
+	# Check config files
+	echo ""
+	echo "=== Configuration Files ==="
+	if [ -f "$CONF_DIR/libnfc-nci.conf" ]; then
+		echo "✓ $CONF_DIR/libnfc-nci.conf"
+	else
+		echo "✗ $CONF_DIR/libnfc-nci.conf not found"
+	fi
+	
+	if [ -f "$CONF_DIR/libnfc-nxp.conf" ]; then
+		echo "✓ $CONF_DIR/libnfc-nxp.conf"
+	else
+		echo "✗ $CONF_DIR/libnfc-nxp.conf not found"
+	fi
+	
+	# Check NFC app
+	echo ""
+	echo "=== NFC Application ==="
+	if [ -x "$NFC_APP" ]; then
+		echo "✓ $NFC_APP found"
+	else
+		echo "✗ $NFC_APP not found or not executable"
+	fi
+}
+
+show_config() {
+	echo "=== NFC Configuration Files ==="
+	echo ""
+	if [ -f "$CONF_DIR/libnfc-nci.conf" ]; then
+		echo "--- libnfc-nci.conf ---"
+		cat "$CONF_DIR/libnfc-nci.conf"
+		echo ""
+	fi
+	
+	if [ -f "$CONF_DIR/libnfc-nxp.conf" ]; then
+		echo "--- libnfc-nxp.conf ---"
+		cat "$CONF_DIR/libnfc-nxp.conf"
+		echo ""
+	fi
+}
+
+case "$1" in
+	start)
+		echo "Starting NFC demo app..."
+		$NFC_APP poll &
+		;;
+	stop)
+		echo "Stopping NFC demo app..."
+		killall nfcDemoApp 2>/dev/null
+		;;
+	status)
+		if pgrep -f nfcDemoApp >/dev/null; then
+			echo "NFC demo app is running"
+			pgrep -af nfcDemoApp
+		else
+			echo "NFC demo app is not running"
+		fi
+		;;
+	test)
+		echo "Running NFC test..."
+		check_hardware
+		echo ""
+		echo "Starting brief NFC poll test..."
+		timeout 5 $NFC_APP poll || echo "Test completed"
+		;;
+	check)
+		check_hardware
+		;;
+	config)
+		show_config
+		;;
+	help|--help|-h)
+		print_usage
+		;;
+	*)
+		echo "Error: Unknown command '$1'"
+		echo ""
+		print_usage
+		exit 1
+		;;
+esac

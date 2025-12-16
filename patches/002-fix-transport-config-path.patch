@@ -1,0 +1,12 @@
+--- a/src/nxp_nci_hal_libnfc-nci/utils/config.cc
++++ b/src/nxp_nci_hal_libnfc-nci/utils/config.cc
+@@ -31,7 +31,7 @@
+ #include "phNxpLog.h"
+ 
+-const char alternative_config_path[] = CONFIG_PATH;
++const char alternative_config_path[] = "/etc/nfc/";
+-const char transport_config_path[] = "/etc/";
++const char transport_config_path[] = "/etc/nfc/";
+ 
+ #define config_name             "libnfc-nci.conf"
+ #define extra_config_base       "libnfc-nci-"

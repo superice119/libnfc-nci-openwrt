@@ -1,0 +1,45 @@
+#!/bin/sh /etc/rc.common
+# NFC service init script for OpenWrt
+
+START=95
+STOP=10
+
+USE_PROCD=1
+PROG=/usr/sbin/nfcDemoApp
+CONF_DIR=/etc/nfc
+
+start_service() {
+	# Check if config files exist
+	[ -f "$CONF_DIR/libnfc-nci.conf" ] || {
+		echo "Configuration file not found: $CONF_DIR/libnfc-nci.conf"
+		return 1
+	}
+	
+	# Check if I2C device exists
+	[ -e /dev/i2c-0 -o -e /dev/i2c-1 ] || {
+		echo "I2C device not found, loading i2c-dev module"
+		insmod i2c-dev 2>/dev/null
+	}
+	
+	# Note: nfcDemoApp is typically run manually or by other services
+	# This init script is provided as a template
+	# Uncomment below to run as a service
+	
+	# procd_open_instance
+	# procd_set_param command $PROG poll
+	# procd_set_param respawn
+	# procd_set_param stdout 1
+	# procd_set_param stderr 1
+	# procd_close_instance
+	
+	echo "NFC configuration ready. Use 'nfcDemoApp poll' to start."
+}
+
+stop_service() {
+	echo "NFC service stopped"
+}
+
+reload_service() {
+	stop
+	start
+}

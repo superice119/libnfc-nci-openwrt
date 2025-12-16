@@ -1,0 +1,29 @@
+Index: libnfc-nci-2.0/src/nfcandroid_nfc_hidlimpl/halimpl/tml/phDal4Nfc_messageQueueLib.h
+===================================================================
+--- libnfc-nci-2.0.orig/src/nfcandroid_nfc_hidlimpl/halimpl/tml/phDal4Nfc_messageQueueLib.h
++++ libnfc-nci-2.0/src/nfcandroid_nfc_hidlimpl/halimpl/tml/phDal4Nfc_messageQueueLib.h
+@@ -21,6 +21,9 @@
+ #ifndef PHDAL4NFC_MESSAGEQUEUE_H
+ #define PHDAL4NFC_MESSAGEQUEUE_H
+ 
++#include <stdint.h>
++#include <sys/types.h>
++
+ #include <linux/ipc.h>
+ #include <phNfcTypes.h>
+ 
+Index: libnfc-nci-2.0/src/android/utility/macro.h
+===================================================================
+--- libnfc-nci-2.0.orig/src/android/utility/macro.h
++++ libnfc-nci-2.0/src/android/utility/macro.h
+@@ -77,7 +77,10 @@
+ 
+ 
+ /*************Used in the phDal4Nfc_messageQueueLib.c*****************/
++#if defined(_WIN32) || defined(_WIN64)
++/* key_t is only needed on Windows, Linux has it in sys/types.h */
+ typedef int key_t;
++#endif
+ 
+ //Declarations to adapt uinstd.h on Linux
+ #ifdef _WIN64

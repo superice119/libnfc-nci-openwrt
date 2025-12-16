@@ -1,0 +1,36 @@
+Index: libnfc-nci-2.0/src/nfcandroid_nfc_hidlimpl/halimpl/utils/NfccPowerTracker.h
+===================================================================
+--- libnfc-nci-2.0.orig/src/nfcandroid_nfc_hidlimpl/halimpl/utils/NfccPowerTracker.h
++++ libnfc-nci-2.0/src/nfcandroid_nfc_hidlimpl/halimpl/utils/NfccPowerTracker.h
+@@ -17,6 +17,7 @@
+  ******************************************************************************/
+ #pragma once
+ 
++#include <cstdint>
+ #include <string>
+ #include <time.h>
+ #include <vector>
+Index: libnfc-nci-2.0/src/nxp_nci_hal_libnfc-nci/src/include/Nxp_Features.h
+===================================================================
+--- libnfc-nci-2.0.orig/src/nxp_nci_hal_libnfc-nci/src/include/Nxp_Features.h
++++ libnfc-nci-2.0/src/nxp_nci_hal_libnfc-nci/src/include/Nxp_Features.h
+@@ -18,6 +18,7 @@
+ 
+ #ifndef NXP_FEATURES_H
+ #define NXP_FEATURES_H
++#include <cstdint>
+ #include <unistd.h>
+ #include <string>
+ 
+Index: libnfc-nci-2.0/src/nfcandroid_nfc_hidlimpl/halimpl/utils/NxpNfcCapability.h
+===================================================================
+--- libnfc-nci-2.0.orig/src/nfcandroid_nfc_hidlimpl/halimpl/utils/NxpNfcCapability.h
++++ libnfc-nci-2.0/src/nfcandroid_nfc_hidlimpl/halimpl/utils/NxpNfcCapability.h
+@@ -17,6 +17,7 @@
+  ******************************************************************************/
+ #ifndef __CAP_H__
+ #define __CAP_H__
++#include <cstdint>
+ #include "Nxp_Features.h"
+ #define pConfigFL (capability::getInstance())
+ 

@@ -393,6 +393,8 @@ BSD-3-Clause
 ### PN7160 Module Purchase
 - 🔗 [B26-I-6818 Module (1688.com)](https://detail.1688.com/offer/849189785380.html?spm=a261y.25179003.relatedOffer.5.69cf47983rNrHB)
 
+### PN7160 firmware download issue
+- 🔗 [Remove libpn7160_fw.so, we need not download the firmware](https://community.nxp.com/t5/Other-NXP-Products/PN7160-NFC-bring-up-on-Yocto-Mickledore/m-p/2050086)
 ---
 
 ## 💬 Support

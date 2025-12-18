@@ -2,6 +2,11 @@
 
 OpenWrt package for NXP PN7160 NFC Controller NCI stack.
 
+**NOTE: do not download the firmware, because download bugy
+now software support version:
+FW Version: 12.50.5 (in module)
+FW Version: 12.50.9 (in libpn7160_fw.so)
+
 ## 🔍 PN7160 Special Characteristics
 
 ### Why doesn't i2cdetect scan detect it?

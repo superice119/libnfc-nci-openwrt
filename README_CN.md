@@ -317,6 +317,7 @@ Apache License 2.0（详见源码中的 LICENSE.txt）
 
 ### 官方文档
 - 🔗 [NXP 官方仓库](https://github.com/NXPNFCLinux/linux_libnfc-nci)
+- 🔗 [NXP NFC 示例代码](https://github.com/NXPNFCLinux/linux_libnfc-nci_examples.git)
 - 🔗 [NXP 社区移植指南 - Raspberry Pi 5](https://community.nxp.com/t5/NFC-Knowledge-Base/Porting-PN7160-NCI2-stack-to-Raspberry-Pi-5-OS-Bookworm/ta-p/1977521)
 - 🔗 [PN7160 Linux 移植指南 (AN13287)](https://www.nxp.com/docs/en/application-note/AN13287.pdf)
 - 🔗 [PN7160 评估套件快速入门指南 (AN12991)](https://www.nxp.com/docs/en/application-note/AN12991.pdf)

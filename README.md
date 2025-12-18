@@ -378,6 +378,7 @@ BSD-3-Clause
 
 ### Official Documentation
 - 🔗 [NXP Official Repository](https://github.com/NXPNFCLinux/linux_libnfc-nci)
+- 🔗 [NXP NFC Examples](https://github.com/NXPNFCLinux/linux_libnfc-nci_examples.git)
 - 🔗 [NXP Community Porting Guide - Raspberry Pi 5](https://community.nxp.com/t5/NFC-Knowledge-Base/Porting-PN7160-NCI2-stack-to-Raspberry-Pi-5-OS-Bookworm/ta-p/1977521)
 - 🔗 [PN7160 Linux Porting Guide (AN13287)](https://www.nxp.com/docs/en/application-note/AN13287.pdf)
 - 🔗 [PN7160 Evaluation Kit Quick Start Guide (AN12991)](https://www.nxp.com/docs/en/application-note/AN12991.pdf)
@@ -395,6 +396,7 @@ BSD-3-Clause
 
 ### PN7160 firmware download issue
 - 🔗 [Remove libpn7160_fw.so, we need not download the firmware](https://community.nxp.com/t5/Other-NXP-Products/PN7160-NFC-bring-up-on-Yocto-Mickledore/m-p/2050086)
+
 ---
 
 ## 💬 Support
